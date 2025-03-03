@@ -52,4 +52,4 @@ GitHub: [\[wilvison\]](https://github.com/wilvison)
 
 ## Licença
 
-Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICENSE) para detalhes.
+Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](https://github.com/wilvison/App-financas/tree/main#:~:text=3%20minutes%20ago-,License.md,-publica%C3%A7%C3%A3o%20no%20github) para detalhes.
