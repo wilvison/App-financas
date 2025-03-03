@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Controle Financeiro Familiar</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Controle Financeiro Familiar</h1>
+            <div class="auth-buttons">
+                <button id="authorize_button" style="display: none;">Autorizar</button>
+                <button id="signout_button" style="display: none;">Sair</button>
+            </div>
+        </header>
+
+        <div class="dashboard">
+            <div class="summary-cards">
+                <div class="card">
+                    <h3>Saldo Total</h3>
+                    <p id="saldo-total">R$ 0,00</p>
+                </div>
+                <div class="card">
+                    <h3>Entradas</h3>
+                    <p id="total-entradas">R$ 0,00</p>
+                </div>
+                <div class="card">
+                    <h3>Saídas</h3>
+                    <p id="total-saidas">R$ 0,00</p>
+                </div>
+            </div>
+
+            <div class="charts-container">
+                <div class="chart-box">
+                    <canvas id="despesas-chart"></canvas>
+                </div>
+                <div class="chart-box">
+                    <canvas id="balanco-chart"></canvas>
+                </div>
+            </div>
+
+            <div class="form-container">
+                <h2>Nova Transação</h2>
+                <form id="financeForm">
+                    <div class="form-group">
+                        <label for="data">Data da Transação:</label>
+                        <input type="date" id="data" required aria-label="Data da transação">
+                    </div>
+                    <div class="form-group">
+                        <label for="descricao">Descrição:</label>
+                        <input type="text" id="descricao" placeholder="Digite a descrição" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="valor">Valor:</label>
+                        <input type="number" id="valor" placeholder="Digite o valor" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="categoria">Categoria:</label>
+                        <select id="categoria" required aria-label="Selecione a categoria">
+                            <option value="">Selecione uma categoria</option>
+                            <option value="salario">Salário</option>
+                            <option value="moradia">Moradia</option>
+                            <option value="alimentacao">Alimentação</option>
+                            <option value="transporte">Transporte</option>
+                            <option value="lazer">Lazer</option>
+                            <option value="outros">Outros</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="tipo">Tipo de Transação:</label>
+                        <select id="tipo" aria-label="Selecione o tipo de transação">
+                            <option value="entrada">Entrada</option>
+                            <option value="saida">Saída</option>
+                        </select>
+                    </div>
+                    <button type="submit">Salvar</button>
+                </form>
+            </div>
+
+            <div class="filter-section">
+                <h3>Filtros</h3>
+                <label for="mes-filtro">Selecione o mês:</label>
+                <input type="month" id="mes-filtro" aria-label="Filtrar por mês">
+                <button onclick="filtrarPorMes()">Filtrar</button>
+            </div>
+
+            <div class="transactions-container">
+                <h2>Últimas Transações</h2>
+                <div id="transactions-list"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Carregar scripts na ordem correta -->
+    <script src="config.js"></script>
+    <script>
+        // Configurar headers para CORS
+        const head = document.getElementsByTagName('head')[0];
+        const meta = document.createElement('meta');
+        meta.httpEquiv = "Content-Security-Policy";
+        meta.content = "default-src 'self' https://apis.google.com https://sheets.googleapis.com; script-src 'self' 'unsafe-inline' https://apis.google.com https://cdn.jsdelivr.net";
+        head.appendChild(meta);
+    </script>
+    <script src="https://apis.google.com/js/api.js" defer></script>
+    <script src="script.js" defer></script>
+</body>
+</html>
