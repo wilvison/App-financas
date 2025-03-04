@@ -1,10 +1,10 @@
-const CLIENT_ID = '949830020354-9lrrn42760jue4j04kfai3bk09p4upkd.apps.googleusercontent.com';
-const API_KEY = 'AIzaSyB86hsVeUrzwQYwzbaRCYdU3paEj736MG8';
+const CLIENT_ID = 'SUA_CLIENT_ID';
+const API_KEY = 'SEU_API_KEY';
 const DISCOVERY_DOCS = ["https://sheets.googleapis.com/$discovery/rest?version=v4"];
 const SCOPES = "https://www.googleapis.com/auth/spreadsheets";
 
 // Corrigir o formato do SPREADSHEET_ID - remover a URL completa e manter apenas o ID
-const SPREADSHEET_ID = '1_Gstx0m4xoNA5ynVTjMoUE33vB63JqOueXh5PLkLMS4';
+const SPREADSHEET_ID = 'SEU_SPREADSHEET_ID';
 const RANGE = 'Sheet1!A:E'; // Atualizado para incluir a coluna E (categoria)
 
 const authorizeButton = document.getElementById('authorize_button');
