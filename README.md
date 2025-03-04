@@ -17,7 +17,7 @@ Este projeto é um aplicativo web simples que utiliza a API do Google Sheets par
 
 1. Acesse o [Google Developers Console](https://console.developers.google.com/) e crie um novo projeto.
 2. Ative a API do Google Sheets e gere as credenciais:
-   - Insira o Client ID e API Key no arquivo `script.js` nos placeholders `YOUR_CLIENT_ID` e `YOUR_API_KEY`.
+   - Insira o Client ID e API Key no arquivo `config.js` nos placeholders `YOUR_CLIENT_ID` e `YOUR_API_KEY`.
    - Crie ou utilize uma planilha existente e atualize o `SPREADSHEET_ID` em `script.js`.
 3. Certifique-se de que a planilha possua uma aba chamada "Sheet1" ou altere o valor da variável `RANGE` conforme necessário.
 

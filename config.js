@@ -7,3 +7,10 @@ const CONFIG = {
     SCOPES: "https://www.googleapis.com/auth/spreadsheets",
     RANGE: 'Sheet1!A:E'
 };
+
+// Verificar se as configurações estão corretas
+console.log('CLIENT_ID:', CONFIG.CLIENT_ID);
+console.log('API_KEY:', CONFIG.API_KEY);
+console.log('SPREADSHEET_ID:', CONFIG.SPREADSHEET_ID);
+console.log('SCOPES:', CONFIG.SCOPES);
+console.log('RANGE:', CONFIG.RANGE);

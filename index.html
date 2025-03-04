@@ -6,8 +6,19 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self';
+        script-src 'self' 'unsafe-inline' https://apis.google.com https://cdn.jsdelivr.net https://*.kaspersky-labs.com;
+        connect-src 'self' https://sheets.googleapis.com https://apis.google.com https://*.kaspersky-labs.com https://*.mixpanel.com;
+        style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+        font-src 'self' https://fonts.gstatic.com;
+        img-src 'self' data: https:;
+        frame-src 'self' https://accounts.google.com;
+        base-uri 'self';
+        form-action 'self'">
     <title>Controle Financeiro Familiar</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>

@@ -130,44 +130,51 @@ function handleClientLoad() {
 }
 
 // Modifique a função de callback do formulário para atualizar o dashboard
-financeForm.addEventListener('submit', event => {
+financeForm.addEventListener('submit', async event => {
     event.preventDefault();
     
-    if (!gapi.auth2.getAuthInstance().isSignedIn.get()) {
-        showNotification('Por favor, faça login primeiro!', 'danger');
-        return;
-    }
-
-    const data = document.getElementById('data').value;
-    const descricao = document.getElementById('descricao').value;
-    const valor = parseFloat(document.getElementById('valor').value).toFixed(2);
-    const tipo = document.getElementById('tipo').value;
-    const categoria = document.getElementById('categoria').value;
-
-    // Validação dos campos
-    if (!data || !descricao || !valor || !tipo || !categoria) {
-        showNotification('Preencha todos os campos!', 'danger');
-        return;
-    }
-
-    const values = [[data, descricao, valor, tipo, categoria]];
-
-    gapi.client.sheets.spreadsheets.values.append({
-        spreadsheetId: CONFIG.SPREADSHEET_ID,
-        range: CONFIG.RANGE,
-        valueInputOption: 'USER_ENTERED',
-        resource: {
-            values: values
+    try {
+        if (!gapi?.auth2?.getAuthInstance()?.isSignedIn?.get()) {
+            showNotification('Por favor, faça login primeiro!', 'danger');
+            return;
         }
-    }).then(response => {
-        console.log('Dados salvos:', response);
-        showNotification('Transação registrada com sucesso!', 'success');
-        financeForm.reset();
-        loadData(); // Recarrega os dados após salvar
-    }).catch(error => {
-        console.error('Erro ao salvar:', error);
-        showNotification('Erro ao salvar dados: ' + (error.result?.error?.message || error.message), 'danger');
-    });
+        
+        const data = document.getElementById('data').value;
+        const descricao = document.getElementById('descricao').value;
+        const valor = parseFloat(document.getElementById('valor').value).toFixed(2);
+        const tipo = document.getElementById('tipo').value;
+        const categoria = document.getElementById('categoria').value;
+
+        // Validação dos campos
+        if (!data || !descricao || !valor || !tipo || !categoria) {
+            showNotification('Preencha todos os campos!', 'danger');
+            return;
+        }
+
+        const values = [[data, descricao, valor, tipo, categoria]];
+
+        console.log('Enviando dados para a planilha...');
+        gapi.client.sheets.spreadsheets.values.append({
+            spreadsheetId: CONFIG.SPREADSHEET_ID,
+            range: CONFIG.RANGE,
+            valueInputOption: 'USER_ENTERED',
+            resource: {
+                values: values
+            }
+        }).then(response => {
+            console.log('Dados salvos:', response);
+            showNotification('Transação registrada com sucesso!', 'success');
+            financeForm.reset();
+            loadData(); // Recarrega os dados após salvar
+        }).catch(error => {
+            console.error('Erro ao salvar:', error);
+            showNotification('Erro ao salvar dados: ' + (error.result?.error?.message || error.message), 'danger');
+        });
+        
+    } catch (error) {
+        console.error('Erro na autenticação:', error);
+        showNotification('Erro na autenticação. Por favor, faça login novamente.', 'danger');
+    }
 });
 
 // Função para verificar se a planilha existe e tem as permissões corretas
@@ -183,32 +190,41 @@ function verificarPlanilha() {
     });
 }
 
-// Modificar a função initClient para incluir a verificação da planilha
-function initClient() {
-    gapi.client.init({
-        apiKey: CONFIG.API_KEY,
-        clientId: CONFIG.CLIENT_ID,
-        discoveryDocs: CONFIG.DISCOVERY_DOCS,
-        scope: CONFIG.SCOPES
-    }).then(() => {
-        // Adicionar tratamento de erro mais detalhado
-        try {
-            gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
-            updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
-            authorizeButton.onclick = handleAuthClick;
-            signoutButton.onclick = handleSignoutClick;
-            
-            if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
-                verificarPlanilha();
-            }
-        } catch (error) {
-            console.error('Erro na inicialização:', error);
-            showNotification('Erro na inicialização. Por favor, recarregue a página.', 'danger');
+// Modificar a função initClient para garantir que o gapi esteja carregado
+async function initClient() {
+    try {
+        console.log('Inicializando a API do Google...');
+        await gapi.client.init({
+            apiKey: CONFIG.API_KEY,
+            clientId: CONFIG.CLIENT_ID,
+            discoveryDocs: CONFIG.DISCOVERY_DOCS,
+            scope: CONFIG.SCOPES
+        });
+
+        // Verificar se o gapi.auth2 está disponível
+        if (!gapi.auth2) {
+            console.log('Carregando gapi.auth2...');
+            await new Promise((resolve) => gapi.load('auth2', resolve));
         }
-    }).catch(error => {
-        console.error('Erro completo:', error);
-        showNotification('Erro ao inicializar API: ' + (error.details || error.message), 'danger');
-    });
+
+        const auth2 = gapi.auth2.init();
+        auth2.isSignedIn.listen(updateSigninStatus);
+        updateSigninStatus(auth2.isSignedIn.get());
+
+        authorizeButton.onclick = handleAuthClick;
+        signoutButton.onclick = handleSignoutClick;
+
+        if (auth2.isSignedIn.get()) {
+            console.log('Usuário está autenticado. Verificando a planilha...');
+            verificarPlanilha();
+        } else {
+            console.log('Usuário não está autenticado.');
+        }
+
+    } catch (error) {
+        console.error('Erro na inicialização:', error);
+        showNotification('Erro ao inicializar. Por favor, recarregue a página.', 'danger');
+    }
 }
 
 function loadData() {
